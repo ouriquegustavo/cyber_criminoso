@@ -2,12 +2,12 @@ import pygame
 import math
 from os.path import join
 from .projectile import Projectile
+from ..engine.entity import Entity
 
 
-class Character:
+class Character(Entity):
     def __init__(self, game, gid, x, y):
-        self.game = game
-        self.gid = gid
+        super().__init__(game, gid)
         self.x = x
         self.y = y
 
@@ -36,10 +36,7 @@ class Character:
 
         if self.game.controls.c['fire'] and not self.proj_delay_cur:
             self.proj_delay_cur = self.proj_delay_max
-            mid = max(self.game.entities)
-            self.game.entities[mid + 1] = Projectile(
-                self.game, mid + 1, self.x, self.y
-            )
+            self.game.entity_manager.create(Projectile, self.x, self.y)
 
         if self.proj_delay_cur:
             self.proj_delay_cur -= 1

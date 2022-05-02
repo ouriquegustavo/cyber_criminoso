@@ -2,12 +2,15 @@ import pygame
 from .engine.clock import Clock
 from .engine.display import Display
 from .engine.controls import Controls
+from .engine.entity_manager import EntityManager
 from .entities.character import Character
+from .entities.enemy import Enemy
 
 
 class Game:
     def __init__(self):
         self.is_running = False
+        self.entity_manager = EntityManager(self)
         self.clock = Clock(self)
         self.display = Display(self)
         self.controls = Controls(self)
@@ -17,10 +20,9 @@ class Game:
         self.clock.start(60)
         self.is_running = True
 
-        self.entities = {}
+        self.character = self.entity_manager.create(Character, 633, 700)
 
-        self.character = Character(self, 0, 100, 100)
-        self.entities[0] = self.character
+        self.entity_manager.create(Enemy, 500, 100)
 
         while self.is_running:
             self.clock.tick()
@@ -30,11 +32,6 @@ class Game:
                     self.is_running = False
 
             self.controls.update()
-
-            keys = list(self.entities.keys())
-            print(len(keys))
-            for k in keys:
-                self.entities[k].update()
+            self.entity_manager.update()
 
             self.display.update()
-            print(self.controls.c)

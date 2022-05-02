@@ -18,7 +18,7 @@ class Display:
         self.display.fill((0, 0, 0))
 
         ### DESENHAR TUDO
-        for k, v in self.game.entities.items():
+        for k, v in self.game.entity_manager.entities.items():
             v.draw()
 
         pygame.display.flip()
