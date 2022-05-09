@@ -43,22 +43,20 @@ class Enemy(Entity):
                     self.game.entity_manager.create(Enemy, xr, yr)
                     self.t = 0
                     self.should_destroy = True
+                    self.game.clock.create_task(
+                        f'destroi_{self.gid}',
+                        0,
+                        self.game.entity_manager.destroy,
+                        (self.gid,)
+                    )
+                    self.game.clock.create_task(
+                        f'destroi_{p.gid}',
+                        0,
+                        self.game.entity_manager.destroy,
+                        (p.gid,)
+                    )
                     return
-        if self.should_destroy:
-            self.t += 1
-            self.radius += 7
-            self.w = self.radius * 2
-            self.h = self.radius * 2
-            self.sprite = pygame.Surface((self.w, self.h)).convert_alpha()
-            self.sprite.fill((0, 0, 0, 0))
-            pygame.draw.circle(
-                self.sprite,
-                (255, 0, 0, 255),
-                (self.radius, self.radius),
-                self.radius,
-            )
-            if self.t >= 10:
-                self.game.entity_manager.destroy(self.gid)
+                
 
     def draw(self):
         self.game.display.blit(

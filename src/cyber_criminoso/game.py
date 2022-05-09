@@ -25,7 +25,7 @@ class Game:
         self.entity_manager.create(Enemy, 500, 100)
 
         while self.is_running:
-            self.clock.tick()
+            self.clock.update()
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:

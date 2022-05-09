@@ -36,7 +36,13 @@ class Character(Entity):
 
         if self.game.controls.c['fire'] and not self.proj_delay_cur:
             self.proj_delay_cur = self.proj_delay_max
-            self.game.entity_manager.create(Projectile, self.x, self.y)
+            self.game.clock.create_task(
+                'gen_proj',
+                0,
+                self.game.entity_manager.create,
+                (Projectile, self.x, self.y)
+            )
+            
 
         if self.proj_delay_cur:
             self.proj_delay_cur -= 1
