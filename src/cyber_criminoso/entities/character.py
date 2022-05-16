@@ -13,8 +13,14 @@ class Character(Entity):
 
         self.w = 32
         self.h = 32
+        
+        self.zorder = 100
+        
+        self.radius = 16
 
         self.speed = 5
+        
+        self.kind = 'character'
 
         self.sprite = pygame.image.load(
             join('src', 'cyber_criminoso', 'sprites', 'ship.png')
@@ -22,6 +28,7 @@ class Character(Entity):
 
         self.proj_delay_max = 15
         self.proj_delay_cur = 0
+        
 
     def update(self):
         dx = -self.game.controls.c['left'] + self.game.controls.c['right']
@@ -40,7 +47,7 @@ class Character(Entity):
                 'gen_proj',
                 0,
                 self.game.entity_manager.create,
-                (Projectile, self.x, self.y)
+                (Projectile, self.x, self.y, 0, -15, ['enemy'])
             )
             
 

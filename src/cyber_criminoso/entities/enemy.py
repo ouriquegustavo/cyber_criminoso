@@ -15,6 +15,8 @@ class Enemy(Entity):
         self.w = 32
         self.h = 32
         self.radius = 15
+        
+        self.kind = 'enemy'
 
         self.sprite = pygame.Surface((self.w, self.h)).convert_alpha()
         self.sprite.fill((0, 0, 0, 0))
@@ -26,7 +28,7 @@ class Enemy(Entity):
 
         self.should_destroy = False
 
-        self.proj_delay_max = 10
+        self.proj_delay_max = 20
         self.proj_delay_cur = 0
 
     def update(self):
@@ -38,8 +40,7 @@ class Enemy(Entity):
                     'gen_proj',
                     0,
                     self.game.entity_manager.create,
-                    (Projectile, self.x, self.y),
-                    {'e': True}
+                    (Projectile, self.x, self.y, 0, 15, ['character']),
                 )
             if self.proj_delay_cur:
                 self.proj_delay_cur -= 1
@@ -59,31 +60,7 @@ class Enemy(Entity):
                 xr = random.randint(100, 1266)
                 yr = random.randint(10, 650)
                 self.game.entity_manager.create(Enemy, xr, yr)
-                
-            for p in projs:
-                dx = self.x - p.x
-                dy = self.y - p.y
-                dsq = dx * dx + dy * dy
-                if dsq < self.rsq and not p.e:
-                    xr = random.randint(100, 1266)
-                    yr = random.randint(10, 650)
-                    self.game.entity_manager.create(Enemy, xr, yr)
-                    self.t = 0
-                    self.should_destroy = True
-                    self.game.clock.create_task(
-                        f'destroi_{self.gid}',
-                        0,
-                        self.game.entity_manager.destroy,
-                        (self.gid,)
-                    )
-                    self.game.clock.create_task(
-                        f'destroi_{p.gid}',
-                        0,
-                        self.game.entity_manager.destroy,
-                        (p.gid,)
-                    )
-                    return
-                
+
 
     def draw(self):
         self.game.display.blit(
